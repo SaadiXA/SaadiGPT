@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saadi GPT - 🇵🇸</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Palestinian Colors */
+            --palestine-black: #000000;
+            --palestine-white: #FFFFFF;
+            --palestine-green: #007A3D;
+            --palestine-red: #CE1126;
+            
+            /* Theme Variables - Dark (Default) */
+            --bg-primary: #0a0a0f;
+            --bg-secondary: rgba(20, 20, 30, 0.7);
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --bg-input: rgba(255, 255, 255, 0.08);
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0b0;
+            --accent-primary: var(--palestine-green);
+            --accent-secondary: var(--palestine-red);
+            --shadow-glow: 0 0 20px rgba(0, 122, 61, 0.3);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        [dir="ltr"] {
+            --font-primary: 'Inter', sans-serif;
+        }
+
+        [dir="rtl"] {
+            --font-primary: 'Cairo', sans-serif;
+        }
+
+        .light-theme {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: rgba(255, 255, 255, 0.7);
+            --bg-glass: rgba(0, 0, 0, 0.05);
+            --bg-input: rgba(0, 0, 0, 0.08);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6e;
+            --accent-primary: var(--palestine-green);
+            --accent-secondary: var(--palestine-red);
+            --shadow-glow: 0 0 20px rgba(0, 122, 61, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--palestine-green), var(--palestine-red));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            background: var(--bg-input);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: var(--accent-primary);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .assistant-message {
+            align-self: flex-start;
+            background: var(--bg-glass);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .message-content code {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .message-content pre {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .typing-indicator {
+            display: inline-block;
+            position: relative;
+        }
+
+        .typing-dots {
+            display: inline-block;
+        }
+
+        .typing-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input {
+            flex: 1;
+            background: var(--bg-input);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            resize: none;
+            min-height: 60px;
+            max-height: 150px;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(0, 122, 61, 0.2);
+        }
+
+        .send-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .send-btn:hover {
+            background: var(--palestine-green);
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .security-warning {
+            background: rgba(206, 17, 38, 0.1);
+            border: 1px solid var(--palestine-red);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.85rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            opacity: 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--palestine-red);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--palestine-green);
+        }
+
+        .language-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .language-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .language-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-input);
+            transition: .4s;
+            border-radius: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5px;
+        }
+
+        .language-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .language-slider {
+            background-color: var(--accent-primary);
+        }
+
+        input:checked + .language-slider:before {
+            transform: translateX(30px);
+        }
+
+        .language-slider span {
+            font-size: 12px;
+            color: white;
+            z-index: 1;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-input);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+            
+            .controls {
+                gap: 10px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* RTL/LTR specific adjustments */
+        [dir="rtl"] .user-message {
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: var(--border-radius);
+        }
+
+        [dir="rtl"] .assistant-message {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: var(--border-radius);
+        }
+
+        [dir="ltr"] .user-message {
+            border-bottom-right-radius: var(--border-radius);
+            border-bottom-left-radius: 5px;
+        }
+
+        [dir="ltr"] .assistant-message {
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <header>
+            <h1 class="logo">Saadi GPT</h1>
+            <p class="tagline" id="tagline">🇵🇸 مرحبًا بك في سعدي GPT - المعرفة مع الحرية والعدالة</p>
+        </header>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn" id="clearChat">
+                <span id="clearText">مسح المحادثة</span>
+            </button>
+            <button class="btn" id="downloadChat">
+                <span id="downloadText">تحميل المحادثة</span>
+            </button>
+            <button class="btn" id="aboutBtn">
+                <span id="aboutText">حول التطبيق</span>
+            </button>
+            
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <label class="language-toggle">
+                    <input type="checkbox" id="languageToggle">
+                    <span class="language-slider">
+                        <span>EN</span>
+                        <span>AR</span>
+                    </span>
+                </label>
+                
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+        </div>
+
+        <!-- Security Warning -->
+        <div class="security-warning">
+            <strong>⚠️ تحذير أمني:</strong> 
+            <span id="securityText">لا تعرض مفاتيح API للإنتاج في كود العميل - استخدم خادم وكيل. انظر التعليمات في التعليقات بالملف.</span>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="messages" id="messages"></div>
+            
+            <div class="input-area">
+                <textarea class="message-input" id="messageInput" placeholder="اكتب رسالتك هنا..."></textarea>
+                <button class="send-btn" id="sendBtn">➤</button>
+            </div>
+        </div>
+
+        <footer>
+            <p id="footerText">صمم ب❤️ لفلسطين | Saadi GPT - المعرفة مع الحرية والعدالة</p>
+        </footer>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="aboutTitle">حول سعدي GPT</h2>
+                <button class="close-modal" id="closeAboutModal">×</button>
+            </div>
+            <div id="aboutContent">
+                <p>سعدي GPT هو تطبيق دردشة ذكي يدعم القضية الفلسطينية ويسعى لنشر المعرفة مع الحرية والعدالة.</p>
+                <p>تم تطوير هذا التطبيق باستخدام واجهة برمجة تطبيقات جوجل جيميني لتقديم ردود ذكية ومفيدة.</p>
+                <p>يدعم التطبيق الوضع العربي والإنجليزي مع واجهة مستخدم متقدمة وتصميم عصري.</p>
+                <p>🇵🇸 فلسطين حرة</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // =============================================
+        // CONFIGURATION SECTION - READ CAREFULLY
+        // =============================================
+        
+        // SECURITY WARNING: Embedding API keys in client-side code is INSECURE
+        // This exposes your key to anyone who views the source code or uses developer tools
+        // For production, use a server-side proxy as described below
+        
+        // Option 1: Direct API key (INSECURE - for testing only)
+        const GEMINI_API_KEY = "AIzaSyCqq1ZNqn0mvKohRw7kkPHsXj5Y_KEm6G4";
+        
+        // Option 2: Proxy endpoint (RECOMMENDED for production)
+        // const GEMINI_PROXY_URL = "/api/gemini"; // Your proxy endpoint
+        
+        // Example Node.js/Express proxy implementation (commented out):
+        /*
+        const express = require('express');
+        const fetch = require('node-fetch');
+        const app = express();
+        
+        app.use(express.json());
+        
+        app.post('/api/gemini', async (req, res) => {
+            try {
+                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${process.env.GEMINI_API_KEY}`
+                    },
+                    body: JSON.stringify(req.body)
+                });
+                
+                const data = await response.json();
+                res.json(data);
+            } catch (error) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+        
+        app.listen(3000, () => console.log('Proxy server running on port 3000'));
+        */
+        
+        // =============================================
+        // APPLICATION CODE
+        // =============================================
+        
+        // DOM Elements
+        const messagesContainer = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const clearChatBtn = document.getElementById('clearChat');
+        const downloadChatBtn = document.getElementById('downloadChat');
+        const aboutBtn = document.getElementById('aboutBtn');
+        const aboutModal = document.getElementById('aboutModal');
+        const closeAboutModal = document.getElementById('closeAboutModal');
+        const languageToggle = document.getElementById('languageToggle');
+        const themeToggle = document.getElementById('themeToggle');
+        const toast = document.getElementById('toast');
+        
+        // Localization strings
+        const localization = {
+            ar: {
+                tagline: "🇵🇸 مرحبًا بك في سعدي GPT - المعرفة مع الحرية والعدالة",
+                inputPlaceholder: "اكتب رسالتك هنا...",
+                clearText: "مسح المحادثة",
+                downloadText: "تحميل المحادثة",
+                aboutText: "حول التطبيق",
+                aboutTitle: "حول سعدي GPT",
+                aboutContent: `
+                    <p>سعدي GPT هو تطبيق دردشة ذكي يدعم القضية الفلسطينية ويسعى لنشر المعرفة مع الحرية والعدالة.</p>
+                    <p>تم تطوير هذا التطبيق باستخدام واجهة برمجة تطبيقات جوجل جيميني لتقديم ردود ذكية ومفيدة.</p>
+                    <p>يدعم التطبيق الوضع العربي والإنجليزي مع واجهة مستخدم متقدمة وتصميم عصري.</p>
+                    <p>🇵🇸 فلسطين حرة</p>
+                `,
+                footerText: "صمم ب❤️ لفلسطين | Saadi GPT - المعرفة مع الحرية والعدالة",
+                securityText: "لا تعرض مفاتيح API للإنتاج في كود العميل - استخدم خادم وكيل. انظر التعليمات في التعليقات بالملف.",
+                thinking: "جاري التفكير...",
+                copySuccess: "تم نسخ الرد بنجاح",
+                copyError: "فشل نسخ الرد",
+                downloadSuccess: "تم تحميل المحادثة بنجاح",
+                clearConfirm: "هل أنت متأكد من مسح المحادثة؟",
+                errorApi: "خطأ في الاتصال بالخدمة. يرجى المحاولة مرة أخرى.",
+                errorKey: "مفتاح API غير صالح أو مفقود. يرجى التحقق من الإعدادات.",
+                welcomeMessage: "مرحبًا! أنا سعدي GPT، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟"
+            },
+            en: {
+                tagline: "🇵🇸 Welcome to Saadi GPT — Knowledge with Freedom & Justice.",
+                inputPlaceholder: "Type your message here...",
+                clearText: "Clear Chat",
+                downloadText: "Download Conversation",
+                aboutText: "About",
+                aboutTitle: "About Saadi GPT",
+                aboutContent: `
+                    <p>Saadi GPT is an intelligent chat application that supports the Palestinian cause and seeks to spread knowledge with freedom and justice.</p>
+                    <p>This application was developed using the Google Gemini API to provide intelligent and useful responses.</p>
+                    <p>The application supports both Arabic and English interfaces with an advanced and modern user interface.</p>
+                    <p>🇵🇸 Free Palestine</p>
+                `,
+                footerText: "Designed with ❤️ for Palestine | Saadi GPT - Knowledge with Freedom & Justice",
+                securityText: "Never expose production API keys in client-side code — use a server proxy. See instructions in file comments.",
+                thinking: "Thinking...",
+                copySuccess: "Response copied successfully",
+                copyError: "Failed to copy response",
+                downloadSuccess: "Conversation downloaded successfully",
+                clearConfirm: "Are you sure you want to clear the conversation?",
+                errorApi: "Error connecting to the service. Please try again.",
+                errorKey: "Invalid or missing API key. Please check your settings.",
+                welcomeMessage: "Hello! I'm Saadi GPT, your intelligent assistant. How can I help you today?"
+            }
+        };
+        
+        // Application state
+        let currentLanguage = 'ar';
+        let isDarkTheme = true;
+        let conversation = [];
+        
+        // Initialize the application
+        function init() {
+            loadConversation();
+            setupEventListeners();
+            showWelcomeMessage();
+            initParticles();
+            updateUI();
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            sendBtn.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keydown', handleKeydown);
+            clearChatBtn.addEventListener('click', clearConversation);
+            downloadChatBtn.addEventListener('click', downloadConversation);
+            aboutBtn.addEventListener('click', () => showModal(aboutModal));
+            closeAboutModal.addEventListener('click', () => hideModal(aboutModal));
+            languageToggle.addEventListener('change', toggleLanguage);
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === aboutModal) {
+                    hideModal(aboutModal);
+                }
+            });
+        }
+        
+        // Handle keyboard input
+        function handleKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+        
+        // Send a message to the API
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to UI
+            addMessage(message, 'user');
+            messageInput.value = '';
+            adjustTextareaHeight();
+            
+            // Disable send button while processing
+            sendBtn.disabled = true;
+            
+            // Add thinking indicator
+            const thinkingId = addThinkingIndicator();
+            
+            try {
+                // Prepare the request
+                const requestBody = {
+                    contents: [
+                        {
+                            parts: [
+                                {
+                                    text: message
+                                }
+                            ]
+                        }
+                    ]
+                };
+                
+                let response;
+                
+                // Try using direct API key first (for testing)
+                if (GEMINI_API_KEY && GEMINI_API_KEY !== "PUT_YOUR_API_KEY_HERE") {
+                    response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+                } else {
+                    // Fallback to mock response if no API key
+                    response = await getMockResponse(message);
+                }
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Remove thinking indicator
+                removeThinkingIndicator(thinkingId);
+                
+                // Extract and display the response
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    const responseText = data.candidates[0].content.parts[0].text;
+                    addMessage(responseText, 'assistant');
+                    saveConversation();
+                } else {
+                    throw new Error('Invalid response format');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                removeThinkingIndicator(thinkingId);
+                showToast(localization[currentLanguage].errorApi, 'error');
+                
+                // Fallback to mock response
+                const mockResponse = await getMockResponse(message, true);
+                addMessage(mockResponse, 'assistant');
+                saveConversation();
+            } finally {
+                sendBtn.disabled = false;
+                messageInput.focus();
+            }
+        }
+        
+        // Get a mock response for demo purposes
+        async function getMockResponse(message, isError = false) {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+            
+            // Mock response based on message content
+            const lowerMessage = message.toLowerCase();
+            
+            if (isError) {
+                return "عذرًا، حدث خطأ في الاتصال بالخدمة. يرجى المحاولة مرة أخرى لاحقًا.";
+            }
+            
+            if (lowerMessage.includes('فلسطين') || lowerMessage.includes('palestine')) {
+                return "فلسطين دولة عربية ذات تاريخ وتراث غني. إن القضية الفلسطينية قضية تحرر وعدالة. 🇵🇸";
+            } else if (lowerMessage.includes('سلام') || lowerMessage.includes('peace')) {
+                return "السلام يتحقق بالعدالة والحرية للشعب الفلسطيني. السلام الحقيقي يقوم على احترام حقوق الإنسان.";
+            } else if (lowerMessage.includes('مساعد') || lowerMessage.includes('help')) {
+                return "أنا سعدي GPT، مساعدك الذكي. يمكنني مساعدتك في answering questions, generating text, translation, and more. How can I assist you today?";
+            } else {
+                const responses = [
+                    "هذا سؤال مثير للاهتمام. بناءً على معرفتي، يمكنني أن أقول أن...",
+                    "شكرًا لسؤالك. إليك ما أعرفه عن هذا الموضوع...",
+                    "أفهم استفسارك. دعني أوضح ذلك لك...",
+                    "هذا موضوع مهم. وفقًا لأحدث المعلومات...",
+                    "سأكون سعيدًا بمساعدتك في هذا. إليك ما تحتاج إلى معرفته..."
+                ];
+                return responses[Math.floor(Math.random() * responses.length)];
+            }
+        }
+        
+        // Add a message to the UI
+        function addMessage(text, sender) {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${sender}-message`;
+            
+            const contentEl = document.createElement('div');
+            contentEl.className = 'message-content';
+            
+            // Simple markdown parsing
+            let formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>');
+            
+            // Handle code blocks
+            formattedText = formattedText.replace(/```([^`]+)```/g, '<pre><code>$1</code></pre>');
+            
+            contentEl.innerHTML = formattedText;
+            messageEl.appendChild(contentEl);
+            
+            // Add copy button to assistant messages
+            if (sender === 'assistant') {
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'btn';
+                copyBtn.innerHTML = '📋';
+                copyBtn.style.marginTop = '10px';
+                copyBtn.style.fontSize = '0.8rem';
+                copyBtn.title = currentLanguage === 'ar' ? 'نسخ الرد' : 'Copy response';
+                copyBtn.addEventListener('click', () => copyToClipboard(text));
+                messageEl.appendChild(copyBtn);
+            }
+            
+            messagesContainer.appendChild(messageEl);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Add to conversation history
+            conversation.push({ sender, text, timestamp: new Date().toISOString() });
+        }
+        
+        // Add thinking indicator
+        function addThinkingIndicator() {
+            const thinkingEl = document.createElement('div');
+            thinkingEl.className = 'message assistant-message';
+            thinkingEl.id = 'thinking-indicator';
+            
+            const contentEl = document.createElement('div');
+            contentEl.className = 'message-content';
+            
+            const typingEl = document.createElement('div');
+            typingEl.className = 'typing-indicator';
+            typingEl.innerHTML = `
+                <span>${localization[currentLanguage].thinking}</span>
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            
+            contentEl.appendChild(typingEl);
+            thinkingEl.appendChild(contentEl);
+            messagesContainer.appendChild(thinkingEl);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            return 'thinking-indicator';
+        }
+        
+        // Remove thinking indicator
+        function removeThinkingIndicator(id) {
+            const thinkingEl = document.getElementById(id);
+            if (thinkingEl) {
+                thinkingEl.remove();
+            }
+        }
+        
+        // Copy text to clipboard
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast(localization[currentLanguage].copySuccess, 'success');
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                showToast(localization[currentLanguage].copyError, 'error');
+            }
+        }
+        
+        // Show welcome message
+        function showWelcomeMessage() {
+            if (conversation.length === 0) {
+                addMessage(localization[currentLanguage].welcomeMessage, 'assistant');
+            }
+        }
+        
+        // Clear conversation
+        function clearConversation() {
+            if (confirm(localization[currentLanguage].clearConfirm)) {
+                conversation = [];
+                messagesContainer.innerHTML = '';
+                localStorage.removeItem('saadi-gpt-conversation');
+                showWelcomeMessage();
+            }
+        }
+        
+        // Download conversation
+        function downloadConversation() {
+            const content = conversation.map(msg => 
+                `${msg.sender === 'user' ? 'You' : 'Assistant'}: ${msg.text}`
+            ).join('\n\n');
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `saadi-gpt-conversation-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast(localization[currentLanguage].downloadSuccess, 'success');
+        }
+        
+        // Save conversation to localStorage
+        function saveConversation() {
+            try {
+                localStorage.setItem('saadi-gpt-conversation', JSON.stringify(conversation));
+            } catch (e) {
+                console.error('Failed to save conversation:', e);
+            }
+        }
+        
+        // Load conversation from localStorage
+        function loadConversation() {
+            try {
+                const saved = localStorage.getItem('saadi-gpt-conversation');
+                if (saved) {
+                    conversation = JSON.parse(saved);
+                    
+                    // Re-render messages
+                    messagesContainer.innerHTML = '';
+                    conversation.forEach(msg => {
+                        addMessage(msg.text, msg.sender);
+                    });
+                }
+            } catch (e) {
+                console.error('Failed to load conversation:', e);
+            }
+        }
+        
+        // Toggle language
+        function toggleLanguage() {
+            currentLanguage = languageToggle.checked ? 'en' : 'ar';
+            document.documentElement.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = currentLanguage;
+            updateUI();
+        }
+        
+        // Toggle theme
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            if (isDarkTheme) {
+                document.body.classList.remove('light-theme');
+                themeToggle.textContent = '🌙';
+            } else {
+                document.body.classList.add('light-theme');
+                themeToggle.textContent = '☀️';
+            }
+        }
+        
+        // Update UI elements with current language
+        function updateUI() {
+            const strings = localization[currentLanguage];
+            
+            document.getElementById('tagline').textContent = strings.tagline;
+            document.getElementById('messageInput').placeholder = strings.inputPlaceholder;
+            document.getElementById('clearText').textContent = strings.clearText;
+            document.getElementById('downloadText').textContent = strings.downloadText;
+            document.getElementById('aboutText').textContent = strings.aboutText;
+            document.getElementById('aboutTitle').textContent = strings.aboutTitle;
+            document.getElementById('aboutContent').innerHTML = strings.aboutContent;
+            document.getElementById('footerText').textContent = strings.footerText;
+            document.getElementById('securityText').textContent = strings.securityText;
+        }
+        
+        // Show modal
+        function showModal(modal) {
+            modal.style.display = 'flex';
+        }
+        
+        // Hide modal
+        function hideModal(modal) {
+            modal.style.display = 'none';
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Adjust textarea height based on content
+        function adjustTextareaHeight() {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = Math.min(messageInput.scrollHeight, 150) + 'px';
+        }
+        
+        // Initialize particles background
+        function initParticles() {
+            // Simple particle implementation
+            const canvas = document.createElement('canvas');
+            canvas.id = 'particles-canvas';
+            const particlesJs = document.getElementById('particles-js');
+            particlesJs.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            
+            function resizeCanvas() {
+                canvas.width = particlesJs.offsetWidth;
+                canvas.height = particlesJs.offsetHeight;
+            }
+            
+            function createParticles() {
+                particles = [];
+                const particleCount = Math.min(50, Math.floor(canvas.width * canvas.height / 10000));
+                
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 2 + 0.5,
+                        speedX: (Math.random() - 0.5) * 0.5,
+                        speedY: (Math.random() - 0.5) * 0.5,
+                        color: `rgba(${Math.random() * 100}, ${Math.random() * 100 + 155}, ${Math.random() * 100}, ${Math.random() * 0.5 + 0.1})`
+                    });
+                }
+            }
+            
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+                    
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                });
+                
+                requestAnimationFrame(animateParticles);
+            }
+            
+            resizeCanvas();
+            createParticles();
+            animateParticles();
+            
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                createParticles();
+            });
+        }
+        
+        // Auto-adjust textarea height on input
+        messageInput.addEventListener('input', adjustTextareaHeight);
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
